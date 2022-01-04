@@ -131,19 +131,23 @@ class BlogTagIndexPage(Page):
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
+class PersonBlock(blocks.StructBlock):
+
+    first_name = blocks.CharBlock()
+    surname    = blocks.CharBlock()
+    photo      = ImageChooserBlock(required=False)
+    biography  = blocks.RichTextBlock()
+    
+    class Meta: 
+        icon = 'user'
+
 class NewBlogPage(Page):
 
     
     author = models.CharField(max_length=255)
     date   = models.DateField("Post date")
     body   = StreamField([
-        ('person', blocks.StructBlock([
-            ('first_name', blocks.CharBlock()), 
-            ('surname', blocks.CharBlock()),
-            ('photo', ImageChooserBlock(Required=False)),
-            ('biography', blocks.RichTextBlock()),
-
-        ])),
+        ('person', PersonBlock()),
         ('heading', blocks.CharBlock(form_classname="full title")), 
         ('paragraph', blocks.RichTextBlock()),
         ('image', ImageChooserBlock())
