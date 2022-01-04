@@ -1,15 +1,30 @@
 {% extends 'base.html' %}
 
-{% load wagtailcore_tags  %}
+{% load wagtailcore_tags  wagtailimages_tags %}
+
 
 
 {% block content %}
 
 
 {% for block in page.body  %}
-    <section class="block-{{block.block_type}}"> {% include_block block %}</section>
+   
+   {% if block.block_type == "person" %}
+        <div class="person">
+           {% image block.value.photo width-400 %}
+            <h2> {{block.value.first_name}} {{ block.value.surname}}</h2>
+            {{ block.value.biography }}
+       
+        </div>
+    {% else %}
+        <section class="block-{{ block.block_type }}">
+            {% include_block block %}
+        </section>
+   {% endif %}
+       
 {% endfor %}
     
+
     
 {% endblock content %}
     

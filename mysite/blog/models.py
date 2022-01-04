@@ -133,9 +133,17 @@ from wagtail.images.blocks import ImageChooserBlock
 
 class NewBlogPage(Page):
 
+    
     author = models.CharField(max_length=255)
     date   = models.DateField("Post date")
     body   = StreamField([
+        ('person', blocks.StructBlock([
+            ('first_name', blocks.CharBlock()), 
+            ('surname', blocks.CharBlock()),
+            ('photo', ImageChooserBlock(Required=False)),
+            ('biography', blocks.RichTextBlock()),
+
+        ])),
         ('heading', blocks.CharBlock(form_classname="full title")), 
         ('paragraph', blocks.RichTextBlock()),
         ('image', ImageChooserBlock())
