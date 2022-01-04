@@ -1,18 +1,17 @@
 from django.db import models
 from django import forms 
+
 from wagtail.core.models import Page, Orderable
-from wagtail.core.fields import RichTextField 
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
-
+from wagtail.core.fields import RichTextField, StreamField 
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
-
 from wagtail.search import index
-
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
-from modelcluster.contrib.taggit import ClusterTaggableManager
-from taggit.models import TaggedItemBase
 from wagtail.snippets.models import register_snippet
 
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
+
+from taggit.models import TaggedItemBase
 
 @register_snippet
 class BlogCategory(models.Model):
@@ -125,4 +124,25 @@ class BlogTagIndexPage(Page):
         context['blogpages'] = blogpages
         return context 
 
+
+
+#How to use StreamField for mixed content 
+
+from wagtail.core import blocks
+from wagtail.images.blocks import ImageChooserBlock
+
+class NewBlogPage(Page):
+
+    author = models.CharField(max_length=255)
+    date   = models.DateField("Post date")
+    body   = StreamField([
+        ('heading', blocks.CharBlock(form_classname="full title")), 
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock())
+    ])
     
+    content_panels = Page.content_panels + [
+        FieldPanel('author'), 
+        FieldPanel('date'), 
+        StreamFieldPanel('body')
+    ]
