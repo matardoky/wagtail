@@ -143,10 +143,10 @@ class PersonBlock(blocks.StructBlock):
 
 class NewBlogPage(Page):
 
-    
     author = models.CharField(max_length=255)
     date   = models.DateField("Post date")
     body   = StreamField([
+        ('gallery', blocks.ListBlock(ImageChooserBlock())),
         ('person', PersonBlock()),
         ('heading', blocks.CharBlock(form_classname="full title")), 
         ('paragraph', blocks.RichTextBlock()),
