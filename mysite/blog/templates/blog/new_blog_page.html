@@ -9,14 +9,14 @@
 
 {% for block in page.body  %}
    
-   {% if block.block_type == "person" %}
-        <div class="person">
+   
+        {% comment %} <div class="person">
            {% image block.value.photo width-400 %}
             <h2> {{block.value.first_name}} {{ block.value.surname}}</h2>
             {{ block.value.biography }}
        
-        </div>
-    {% elif block.block_type == "gallery" %}
+        </div> {% endcomment %}
+    {% if block.block_type == "gallery" %}
         <ul class="gallery">
             
             {% for img in block.value %}

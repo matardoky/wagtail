@@ -130,6 +130,7 @@ class BlogTagIndexPage(Page):
 
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.embeds.blocks import EmbedBlock
 
 class PersonBlock(blocks.StructBlock):
 
@@ -140,12 +141,23 @@ class PersonBlock(blocks.StructBlock):
     
     class Meta: 
         icon = 'user'
+        template = "blog/blocks/person.html"
+
+
+class CarouselBlog(blocks.StreamBlock):
+
+    image = ImageChooserBlock()
+    video = EmbedBlock()
+
+    class Meta: 
+        icon = 'image'
 
 class NewBlogPage(Page):
 
     author = models.CharField(max_length=255)
     date   = models.DateField("Post date")
     body   = StreamField([
+        ('carousel', CarouselBlog()),
         ('gallery', blocks.ListBlock(ImageChooserBlock())),
         ('person', PersonBlock()),
         ('heading', blocks.CharBlock(form_classname="full title")), 
